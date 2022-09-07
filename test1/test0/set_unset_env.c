@@ -1,17 +1,10 @@
 #include "shell.h"
 
 /**
-<<<<<<< HEAD
  *  find_env - find given environmental variable in linked list
  *  @env: environmental variable linked list
  *  @str: variable name
  *  Return: idx of node in linked list
-=======
- * find_env - find given environmental variable in linked list
- * @env: environmental variable linked list
- * @str: variable name
- * Return: idx of node in linked list
->>>>>>> jose1
  */
 int find_env(list_t *env, char *str)
 {
@@ -33,7 +26,6 @@ int find_env(list_t *env, char *str)
 }
 
 /**
-<<<<<<< HEAD
  *  _unset_env - deletes node in environmental linked list
  *  @env: linked list
  *  @str: command (e.g. "unsetenv MAIL")
@@ -41,34 +33,17 @@ int find_env(list_t *env, char *str)
  *  Return: 0 on success
  */
 int _unset_env(list_t **env, char **str)
-=======
- * _unsetenv - remove node in environmental linked list
- * @env: linked list
- * @str: user's typed in command (e.g. "unsetenv MAIL")
- * Return: 0 on success
- */
-int _unsetenv(list_t **env, char **str)
->>>>>>> jose1
 {
 	int index = 0, j = 0;
 
 	if (str[1] == NULL)
 	{
-<<<<<<< HEAD
 		write(STDOUT_FILENO, "Too Few Arguments\n", 18);
 		free_ptr_ptr(str);
 		return (-1);
 	}
 	index = find_env(*env, str[1]); /* get index of node to delete */
 	free_ptr_ptr(str);
-=======
-		write(STDOUT_FILENO, "Too few arguments\n", 18);
-		free_double_ptr(str);
-		return (-1);
-	}
-	index = find_env(*env, str[1]); /* get idx of node to delete */
-	free_double_ptr(str);
->>>>>>> jose1
 	if (index == -1) /* check if index errored */
 	{
 		write(STDOUT_FILENO, "Cannot find\n", 12);
@@ -84,7 +59,6 @@ int _unsetenv(list_t **env, char **str)
 }
 
 /**
-<<<<<<< HEAD
  *  _set_env - create if doesn't exist or modify existing
  *  environmental variable in linked list
  *  @env: linked list
@@ -93,14 +67,6 @@ int _unsetenv(list_t **env, char **str)
  *  Return: 0 on success, 1 on fail
  */
 int _set_env(list_t **env, char **str)
-=======
- * _setenv - create or modify existing environmental variable in linked list
- * @env: linked list
- * @str: user's typed in command (e.g. "setenv USER Superman")
- * Return: 0 on success, 1 on fail
- */
-int _setenv(list_t **env, char **str)
->>>>>>> jose1
 {
 	int index = 0, j = 0;
 	char *cat;
@@ -109,7 +75,6 @@ int _setenv(list_t **env, char **str)
 	if (str[1] == NULL || str[2] == NULL)
 	{
 		write(STDOUT_FILENO, "Too few arguments\n", 18);
-<<<<<<< HEAD
 		free_ptr_ptr(str);
 		return (-1);
 	}
@@ -120,18 +85,6 @@ int _setenv(list_t **env, char **str)
 	if (index == -1)
 	{
 		add_node_t_end(env, cat); /* if node doesn't exist? create env var */
-=======
-		free_double_ptr(str);
-		return (-1);
-	}
-	cat = _strdup(str[1]); /* concatenate strings to be new node data */
-	cat = _strcat(cat, "=");
-	cat = _strcat(cat, str[2]);
-	index = find_env(*env, str[1]); /* find idx to traverse to node */
-	if (index == -1)
-	{
-		add_end_node(env, cat); /* doesn't exist? create env var */
->>>>>>> jose1
 	}
 	else
 	{
@@ -145,10 +98,6 @@ int _setenv(list_t **env, char **str)
 		holder->var = _strdup(cat); /* assign to new malloced data */
 	}
 	free(cat);
-<<<<<<< HEAD
 	free_ptr_ptr(str);
-=======
-	free_double_ptr(str);
->>>>>>> jose1
 	return (0);
 }
