@@ -1,11 +1,12 @@
 #include "shell.h"
 
 /**
- *  * c_ignore - custom ignores spaces and newlines
- *   * (e.g. echo "ls\n ls" | ./a.out)
- *    * @str: envrionmental variables
- *     * Return: new string
- *      */
+ *  c_ignore - custom ignores spaces and newlines
+ *  (e.g. echo "ls\n ls" | ./hsh)
+ *  @str: envrionmental variables
+ *
+ *  Return: new string
+ */
 char *c_ignore(char *str)
 {
 	while (*str == ' ' || *str == '\n')
@@ -14,43 +15,43 @@ char *c_ignore(char *str)
 }
 
 /**
- *  * non_interactive - handles when user pipes commands into shell via pipeline
- *   * (e.g. echo "ls/nls -al/n" | ./a.out)
- *    * @env: envrionmental variables
- *     */
+ *  non_interactive - handles when user pipes commands into shell via pipeline
+ *  (i.e. echo "ls/nls -al/n" | ./hsh)
+ *  @env: envrionmental variables
+ */
 void non_interactive(list_t *env)
 {
 	size_t i = 0, n = 0;
-	int command_line_no = 0, exit_stat = 0;
-	char *command = NULL, *n_command = NULL, **n_line, **token;
+	int cmd_line_no = 0, exit_status = 0;
+	char *cmd = NULL, *n_cmd = NULL, **n_line, **tok;
 
-	i = get_line(&command);
+	i = get_line(&cmd);
 	if (i == 0)
 	{
-		free(command);
+		free(cmd);
 		exit(0);
 	}
-	n_command = command;
-	command = c_ignore(command);
-	n_line = _str_tok(command, "\n"); /* tokenize each command string */
-	if (n_command != NULL)
-		free(n_command);
+	n_cmd = cmd;
+	cmd = c_ignore(cmd);
+	n_line = _strtok(cmd, "\n"); /* tokenize each command string */
+	if (n_cmd != NULL)
+		free(n_cmd);
 	n = 0;
 	while (n_line[n] != NULL)
 	{
-		command_line_no++;
-		token = NULL; /* tokenize each command in array of commands */
-		token = _str_tok(n_line[n], " ");
-		exit_stat = _built_in(token, env, command_line_no, n_line);
-		if (exit_stat)
+		cmd_line_no++;
+		tok = NULL; /* tokenize each command in array of commands */
+		tok = _strtok(n_line[n], " ");
+		exit_status = _built_in(tok, env, cmd_line_no, n_line);
+		if (exit_status)
 		{
 			n++;
 			continue;
 		}
-		exit_stat = _execve(token, env, command_line_no);
+		exit_status = _execve(tok, env, cmd_line_no);
 		n++;
 	}
 	free_ptr_ptr(n_line);
 	free_linked_list(env);
-	exit(exit_stat);
+	exit(exit_status);
 }

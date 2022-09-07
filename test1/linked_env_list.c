@@ -14,7 +14,7 @@ list_t *env_linked_list(char **env)
 	head = NULL;
 	for (i = 0; env[i] != NULL; i++)
 	{
-		add_end_node(&head, env[i]);
+		add_node_t_end(&head, env[i]);
 	}
 	return (head);
 }

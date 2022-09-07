@@ -1,56 +1,71 @@
 #include "shell.h"
 
-
-int c_t_size(char *str, char delm)
+/**
+ * cust_size - returns customised number of delim
+ * @str: command into shell
+ * @delim: delimiter i.e space" "
+ *
+ * Return: number of tokens.
+ */
+int cust_size(char *str, char delim)
 {
-	int i = 0, num_delm = 0;
+	int i = 0, num_delim = 0;
 
 	while (str[i] != '\0')
 	{
-		if (str[i] == delm)
+		if (str[i] == delim)
 		{
-			num_delm++;
+			num_delim++;
 		}
 		i++;
 	}
-	return (num_delm);
+	return (num_delim);
 }
-
-char **c_str_tok(char *str, char *delm)
+/**
+ * c_strtok - tokenises a string,
+ * the continuos delimiter with an empty string i.e
+ * path --> ":/bin::/bin/user"
+ * @str: command a user typed inputs into the shell
+ * @delim: delimiter
+ *
+ * Return: array of token i.e. {"\0","/bin", "\0", "/bin/user"}
+ */
+char **c_strtok(char *str, char *delim)
 {
-	int buffsize = 0, p = 0, si = 0, i = 0, len = 0, se = 0;
-	char **toks = NULL, d_ch;
 
-	/* set variable to be delimeter character (" ") */
-	d_ch = delm[0];
+	int buffersize = 0, p = 0, str_in = 0, i = 0, len = 0, str_end = 0;
+	char delim_char, **tokens = NULL;
+
+	/* setting the  variable to be delimeter character (" ") */
+	delim_char = delim[0];
 	/* malloc number of ptrs to store array of tokens, and NULL ptr */
-	buffsize = c_t_size(str, d_ch);
-	toks = malloc(sizeof(char *) * (buffsize + 2));
-	if (toks == NULL)
+	buffersize = cust_size(str, delim_char);
+	tokens = malloc(sizeof(char *) * (buffersize + 2));
+	if (tokens == NULL)
 		return (NULL);
 
-	/* iterate from string index 0 to string ending index */
-	while (str[se] != '\0')
-		se++;
-	while (si < se)
+	/* iterate through a string from index 0 to ending index 'nth' */
+	while (str[str_end] != '\0')
+		str_end++;
+	while (str_in < str_end)
 	{
 		/* malloc lengths for each token ptr in array */
-		len = t_strlen(str, si, d_ch);
-		toks[p] = malloc(sizeof(char) * (len + 1));
-		if (toks[p] == NULL)
+		len = toks_strlen(str, str_in, delim_char);
+		tokens[p] = malloc(sizeof(char) * (len + 1));
+		if (tokens[p] == NULL)
 			return (NULL);
 		i = 0;
-		while ((str[si] != d_ch) &&
-				(str[si] != '\0'))
+		while ((str[str_in] != delim_char) &&
+				(str[str_in] != '\0'))
 		{
-			toks[p][i] = str[si];
+			tokens[p][i] = str[str_in];
 			i++;
-			si++;
+			str_in++;
 		}
-		toks[p][i] = '\0'; /* null terminate at end*/
+		tokens[p][i] = '\0'; /* null terminate at end*/
 		p++;
-		si++;
+		str_in++;
 	}
-	toks[p] = NULL; /* set last array ptr to NULL */
-	return (toks);
+	tokens[p] = NULL; /* set last array ptr to NULL */
+	return (tokens);
 }

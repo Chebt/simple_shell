@@ -39,7 +39,7 @@ int _execve(char **str, list_t *env, int n)
 		free_ptr_ptr(str);
 		return (127);
 	}
-	else 
+	else
 	{
 		pid = fork();
 		if (pid == 0) /* if child process, execute */

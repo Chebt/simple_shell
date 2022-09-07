@@ -13,9 +13,9 @@ unsigned int conv_atoi(char *str)
 
 	while (str[i] != '\0')
 	{
-		if (str[i] >= '0' && str[i] <= '9') 
+		if (str[i] >= '0' && str[i] <= '9')
 			num = num * 10 + (str[i] - '0');
-		if (str[i] > '9' || str[i] < '0') 
+		if (str[i] > '9' || str[i] < '0')
 			return (-1);
 		i++;
 	}
@@ -23,10 +23,10 @@ unsigned int conv_atoi(char *str)
 }
 /**
  * _exit_ - exits main program with a value and after frees user input.
- * @*env: sets free environmental variables at error.
+ * @env: sets free environmental variables at error.
  * @str: command into shell "i.e. exit 98"
  * @num: nth user command line input to print in error message at error state
- * @command: the command to free
+ * @cmd: the command to free
  *
  * Return: 0 on success , 2 on fail
  */
@@ -39,7 +39,7 @@ int _exit_(char **str, list_t *env, int num, char **cmd)
 
 	if (exit_value == -1)
 	{
-		illegal_num(str[1], num, env);
+		forbid_num(str[1], num, env);
 		free_ptr_ptr(str);
 		return (2);
 	}

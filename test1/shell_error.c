@@ -2,7 +2,7 @@
 
 /**
  *  _notfound - write error ("sh: 1: lss: not found")
- *  @str: user's typed command
+ *  @s: user's typed command
  *  @c_n: nth user's typed command
  *  @env: bring in environmental variables linked list to write shell name
  */
@@ -34,7 +34,7 @@ void _notfound(char *s, int c_n, list_t *env)
 
 /**
  *  can_not_cd_to - write error ("sh: 2: cd: can't cd to xyz")
- *  @str: user's typed argument after the cmd cd
+ *  @s: user's typed argument after the cmd cd
  *  @c_n: nth user's typed command
  *  @env: bring in environmental variables linked list to write shell name
  */
@@ -65,12 +65,12 @@ void can_not_cd_to(char *s, int c_n, list_t *env)
 }
 
 /**
- *  illegal_num - write error ("sh: 3: exit: Illegal number abc (or -1)")
- *  @str: user's typed argument after the cmd exit
+ *  forbid_num - write error ("sh: 3: exit: Illegal number abc (or -1)")
+ *  @s: user's typed argument after the cmd exit
  *  @c_n: nth user's typed command
  *  @env: bring in environmental variables linked list to write shell name
  */
-void illegal_num(char *s, int c_n, list_t *env)
+void forbid_num(char *s, int c_n, list_t *env)
 {
 	int count = 0;
 	char *c_shell = NULL, *num = NULL;

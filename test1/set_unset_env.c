@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
- *  * find_env - find given environmental variable in linked list
- *   * @env: environmental variable linked list
- *    * @str: variable name
- *     * Return: idx of node in linked list
- *      */
+ *  find_env - find given environmental variable in linked list
+ *  @env: environmental variable linked list
+ *  @str: variable name
+ *  Return: idx of node in linked list
+ */
 int find_env(list_t *env, char *str)
 {
 	int j = 0, index = 0;
@@ -26,22 +26,23 @@ int find_env(list_t *env, char *str)
 }
 
 /**
- *  * _unsetenv - remove node in environmental linked list
- *   * @env: linked list
- *    * @str: user's typed in command (e.g. "unsetenv MAIL")
- *     * Return: 0 on success
- *      */
-int _unsetenv(list_t **env, char **str)
+ *  _unset_env - deletes node in environmental linked list
+ *  @env: linked list
+ *  @str: command (e.g. "unsetenv MAIL")
+ *
+ *  Return: 0 on success
+ */
+int _unset_env(list_t **env, char **str)
 {
 	int index = 0, j = 0;
 
 	if (str[1] == NULL)
 	{
-		write(STDOUT_FILENO, "Too few arguments\n", 18);
+		write(STDOUT_FILENO, "Too Few Arguments\n", 18);
 		free_ptr_ptr(str);
 		return (-1);
 	}
-	index = find_env(*env, str[1]); /* get idx of node to delete */
+	index = find_env(*env, str[1]); /* get index of node to delete */
 	free_ptr_ptr(str);
 	if (index == -1) /* check if index errored */
 	{
@@ -58,12 +59,14 @@ int _unsetenv(list_t **env, char **str)
 }
 
 /**
- *  * _setenv - create or modify existing environmental variable in linked list
- *   * @env: linked list
- *    * @str: user's typed in command (e.g. "setenv USER Superman")
- *     * Return: 0 on success, 1 on fail
- *      */
-int _setenv(list_t **env, char **str)
+ *  _set_env - create if doesn't exist or modify existing
+ *  environmental variable in linked list
+ *  @env: linked list
+ *  @str: user's typed in command (e.g. "setenv USER Superman")
+ *
+ *  Return: 0 on success, 1 on fail
+ */
+int _set_env(list_t **env, char **str)
 {
 	int index = 0, j = 0;
 	char *cat;
@@ -75,13 +78,13 @@ int _setenv(list_t **env, char **str)
 		free_ptr_ptr(str);
 		return (-1);
 	}
-	cat = _strdup(str[1]); /* concatenate strings to be new node data */
+	cat = _strdup(str[1]); /* adding or concatenate strings to be new node data */
 	cat = _strcat(cat, "=");
 	cat = _strcat(cat, str[2]);
-	index = find_env(*env, str[1]); /* find idx to traverse to node */
+	index = find_env(*env, str[1]); /* find index to traverse to node */
 	if (index == -1)
 	{
-		add_end_node(env, cat); /* doesn't exist? create env var */
+		add_node_t_end(env, cat); /* if node doesn't exist? create env var */
 	}
 	else
 	{

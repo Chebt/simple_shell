@@ -1,7 +1,7 @@
 #include "shell.h"
 
 /**
-   free_ptr_ptr - free malloced arrays
+ * free_ptr_ptr - free malloced arrays
  * @str: array of strings
  */
 void free_ptr_ptr(char **str)

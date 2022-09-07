@@ -3,7 +3,7 @@
 /**
  * main - creates a simple shell
  * @argc: argument count
- * @argv[]: argument vectors to be counted
+ * @argv: argument vectors to be counted
  * @env: environmental variables
  * Return: 0 on success
  */

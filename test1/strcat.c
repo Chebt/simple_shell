@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
- *  * _strcat - concatenate two strings
- *   * @dest: string to be appended to
- *    * @src: string to append
- *     * Return: concatenated string
- *      */
+ * _strcat - concatenate two strings
+ * @dest: string to be appended to
+ * @src: string to append
+ * Return: concatenated string
+ */
 char *_strcat(char *dest, char *src)
 {
 	int len = 0;
@@ -25,7 +25,7 @@ char *_strcat(char *dest, char *src)
 		total_len++;
 	}
 
-	/* _realloc because dest was malloced outside of function */
+	/* _reallocate dest since it was malloced outside of function */
 	dest = _realloc(dest, len, sizeof(char) * total_len + 1);
 
 	while (src[j] != '\0')
@@ -36,5 +36,5 @@ char *_strcat(char *dest, char *src)
 	}
 	dest[len] = '\0';
 
-	return (dest);
+	return (dest); /* reallocated dest */
 }

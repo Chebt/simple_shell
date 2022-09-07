@@ -42,13 +42,13 @@ int _built_in(char **tok, list_t *env, int num, char **cmd)
 	/* if user inputs "setenv", create or modify linked list node */
 	else if (_strcmp(tok[0], "setenv") == 0)
 	{
-		_setenv(&env, tok);
+		_set_env(&env, tok);
 		i = 1;
 	}
 	/* if user inputs "unsetenv", remove linked list node */
 	else if (_strcmp(tok[0], "unsetenv") == 0)
 	{
-		_unsetenv(&env, tok);
+		_unset_env(&env, tok);
 		i = 1;
 	}
 	return (i);
@@ -122,7 +122,7 @@ int prompt(char **env)
 			continue;
 		}
 		tok = NULL;
-		tok = _str_tok(cmd, " "); /*token user cmd*/
+		tok = _strtok(cmd, " "); /*token user cmd*/
 		if (n_cmd != NULL)
 			free(n_cmd);
 		exit_status = _built_in(tok, _env, cmd_line_no, NULL);
