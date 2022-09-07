@@ -27,12 +27,16 @@ typedef struct list
 
 /* function prototypes */
 int prompt(char **);
-void *_realloc(void *, unsigned int, unsigned int);
+
+/* shell utility functions */
 size_t get_line(char **);
 int toks_strlen(char *, int, char);
 char *ignore_space(char *);
+int _execve(char **, list_t *, int);
+char *_which(char *, list_t *);
+void non_interactive(list_t *);
 
-/* built in functions */
+/* shell string functions */
 int _built_in(char **, list_t *, int, char **);
 char **_strtok(char *, char *);
 char **c_strtok(char *, char *);
@@ -40,27 +44,34 @@ char *_strcat(char *, char *);
 char *_strdup(char *);
 char *_strcpy(char *, char *);
 int _strcmp(char *, char *);
+char *int_to_string(int);
 
-
+/* built in function */
+int p_env(char **, list_t *);
 int _cd(char **, list_t *, int);
-void non_interactive(list_t *);
-char *_which(char *, list_t *);
 int _exit_(char **, list_t *, int, char **);
-int _execve(char **, list_t *, int);
+
+/* shell memory management */
+void *_realloc(void *, unsigned int, unsigned int);
 void free_ptr_ptr(char **);
 void free_linked_list(list_t *);
-int p_env(char **, list_t *);
+
+/* environmental path */
 char *get_env(char *, list_t *);
+
 list_t *env_linked_list(char **);
 list_t *add_node_t_end(list_t **, char *);
 ssize_t print_list(list_t *);
 int delete_nodeint_at_index(list_t **, unsigned int);
+
+/* shell env functions */
 int _unset_env(list_t **, char **);
 int _set_env(list_t **, char **);
 int find_env(list_t *, char *);
+
+/* function for handling and print errors */
 void _notfound(char *, int, list_t *);
 void can_not_cd_to(char *, int, list_t *);
 void forbid_num(char *, int, list_t *);
-char *int_to_string(int);
 
 #endif
