@@ -1,42 +1,43 @@
 #include "shell.h"
 
 /**
- * numlen - counts number of 0s in a tens power number
- * @n: number
- * Return: returns count of digits
+ *  num_len - counts number of 0s in a tens power number
+ *  @num: number
+ *
+ *  Return: returns count of digits
  */
-int numlen(int n)
+int num_len(int num)
 {
 	int count = 0;
-	int num = n;
+	int n = num;
 
-	while (num > 9 || num < -9)
+	while (n > 9 || n < -9)
 	{
-		num /= 10;
+		n /= 10;
 		count++;
 	}
 	return (count);
 }
 /**
- * int_to_string - turns an int into a string
- * @number: int
- * Return: returns the int as a string. returns NULL if failed
+ *  int_to_string - turns an int into a string
+ *  @num: integer
+ *
+ *  Return: returns the int as a string. returns NULL if failed
  */
-
-char *int_to_string(int number)
+char *int_to_string(int num)
 {
 	int digits, tens, i = 0, t = 0, x;
 	char *res;
 
-	digits = number;
+	digits = num;
 	tens = 1;
 
-	if (number < 0)
+	if (num < 0)
 		t = 1;
-	res = malloc(sizeof(char) * (numlen(digits) + 2 + t));
+	res = malloc(sizeof(char) * (num_len(digits) + 2 + t));
 	if (res == NULL)
 		return (NULL);
-	if (number < 0)
+	if (num < 0)
 	{
 		res[i] = '-';
 		i++;
@@ -46,7 +47,7 @@ char *int_to_string(int number)
 		digits /= 10;
 		tens *= 10;
 	}
-	for (digits = number; x >= 0; x--)
+	for (digits = num; x >= 0; x--)
 	{
 		if (digits < 0)
 		{
