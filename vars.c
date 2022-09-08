@@ -117,7 +117,7 @@ int replace_vars(parse_t *info)
 		if (!_strcmp(info->argv[i], "$?"))
 		{
 			replace_string(&(info->argv[i]),
-				_strdup(convert_number(info->stat, 10, 0)));
+		       		_strdup(convert_number(info->stat, 10, 0)));
 			continue;
 		}
 		if (!_strcmp(info->argv[i], "$$"))

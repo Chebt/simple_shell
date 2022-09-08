@@ -19,7 +19,7 @@ ssize_t input_buf(parse_t *info, char **buf, size_t *len)
 		free(*buf);
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
-#if USE_GETLINE
+#if _GETLINE
 		r = getline(buf, &len_p, stdin);
 #else
 		r = _getline(info, buf, &len_p);
@@ -30,7 +30,6 @@ ssize_t input_buf(parse_t *info, char **buf, size_t *len)
 			{
 				(*buf)[r - 1] = '\0'; /* remove trailing newline */
 				r--;
-			}
 			info->_flag_count = 1;
 			remove_comments(*buf);
 			build_list(info, *buf, info->count++);
@@ -65,7 +64,6 @@ ssize_t get_input(parse_t *info)
 	{
 		j = i; /* init new iterator to current buf position */
 		p = buf + i; /* get pointer for return */
-
 		check_link(info, buf, &j, i, len);
 		while (j < len) /* iterate to semicolon or end */
 		{
@@ -88,7 +86,6 @@ ssize_t get_input(parse_t *info)
 	*buf_p = buf; /* else not a chain, pass back buffer from _getline() */
 	return (r); /* return length of buffer from _getline() */
 }
-
 /**
  * read_buf - reads a buffer
  * @info: parameter struct

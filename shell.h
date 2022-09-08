@@ -1,5 +1,5 @@
-#ifndef SHELL_H
-#define SHELL_H
+#ifndef _SHELL_H_
+#define _SHELL_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,8 +32,7 @@
 #define _STRTOK 0
 
 #define INFO_FILE	".simple_shell_history"
-#define INFO_MAX	4096
-
+#define INFO_MAX         4096
 extern char **environ;
 
 
@@ -135,7 +134,11 @@ int _strcmp(char *, char *);
 char *strst_with(const char *, const char *);
 char *_strcat(char *, char *);
 
-/* string copy, dup.c */
+int _strlen(char *);
+int _strcmp(char *, char *);
+char *starts_with(const char *, const char *);
+char *_strcat(char *, char *);
+
 char *_strcpy(char *, char *);
 char *_strdup(const char *);
 void _puts(char *);
@@ -165,6 +168,7 @@ int is_alphabet(int);
 int str_to_int(char *);
 
 /* errors handling and write output */
+
 int _err_atoi(char *);
 void print_error(parse_t *, char *);
 int print_d(int, int);
@@ -208,12 +212,16 @@ int build_list(parse_t *info, char *buf, int linecount);
 int renum(parse_t *info);
 
 /* linked lists */
+ssize_t get_input(parse_t *);
+int _getline(parse_t *, char **, size_t *);
+void sigintHandler(int);
+
 list_t *add_node(list_t **, const char *, int);
 list_t *add_node_end(list_t **, const char *, int);
 size_t print_list_str(const list_t *);
 int delete_node_at_index(list_t **, unsigned int);
-void free_list(list_t **);
 
+void free_list(list_t **);
 size_t list_len(const list_t *);
 char **list_to_strings(list_t *);
 size_t print_list(const list_t *);

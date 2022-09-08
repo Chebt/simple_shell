@@ -6,7 +6,11 @@
  *          constant function prototype.
  * Return: Always 0
  */
+<<<<<<< HEAD
 char **get_environ(parse_t *info)
+=======
+char **get_environ(info_t *info)
+>>>>>>> a370d8eb6542732fece024163a70054fd9d78910
 {
 	if (!info->environ || info->env_changed)
 	{
@@ -24,7 +28,11 @@ char **get_environ(parse_t *info)
  *  Return: 1 on delete, 0 otherwise
  * @var: the string env var property
  */
+<<<<<<< HEAD
 int _unsetenv(parse_t *info, char *var)
+=======
+int _unsetenv(info_t *info, char *var)
+>>>>>>> a370d8eb6542732fece024163a70054fd9d78910
 {
 	list_t *node = info->env;
 	size_t i = 0;
@@ -35,7 +43,11 @@ int _unsetenv(parse_t *info, char *var)
 
 	while (node)
 	{
+<<<<<<< HEAD
 		p = strst_with(node->str, var);
+=======
+		p = starts_with(node->str, var);
+>>>>>>> a370d8eb6542732fece024163a70054fd9d78910
 		if (p && *p == '=')
 		{
 			info->env_changed = delete_node_at_index(&(info->env), i);
@@ -58,7 +70,11 @@ int _unsetenv(parse_t *info, char *var)
  * @value: the string env var value
  *  Return: Always 0
  */
+<<<<<<< HEAD
 int _setenv(parse_t *info, char *var, char *value)
+=======
+int _setenv(info_t *info, char *var, char *value)
+>>>>>>> a370d8eb6542732fece024163a70054fd9d78910
 {
 	char *buf = NULL;
 	list_t *node;
@@ -76,7 +92,11 @@ int _setenv(parse_t *info, char *var, char *value)
 	node = info->env;
 	while (node)
 	{
+<<<<<<< HEAD
 		p = strst_with(node->str, var);
+=======
+		p = starts_with(node->str, var);
+>>>>>>> a370d8eb6542732fece024163a70054fd9d78910
 		if (p && *p == '=')
 		{
 			free(node->str);

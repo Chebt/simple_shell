@@ -25,7 +25,6 @@ int hsh(parse_t *info, char **av)
 			builtin_ret = find_builtin(info);
 			if (builtin_ret == -1)
 				find_cmd(info);
-		}
 		else if (inter_active(info))
 			_putchar('\n');
 		free_en(info, 0);
@@ -48,9 +47,9 @@ int hsh(parse_t *info, char **av)
  * @info: the parameter & return info struct
  *
  * Return: -1 if builtin not found,
- *			0 if builtin executed successfully,
- *			1 if builtin found but not successful,
- *			-2 if builtin signals exit()
+ *0 if builtin executed successfully,
+ *1 if builtin found but not successful,
+ *-2 if builtin signals exit()
  */
 int find_builtin(parse_t *info)
 {
@@ -59,7 +58,7 @@ int find_builtin(parse_t *info)
 		{"exit", __exit},
 		{"env", _env},
 		{"help", c_cd},
-		{"history", _info},
+		{"info", _info},
 		{"setenv", _set_env},
 		{"unsetenv", _unset_env},
 		{"cd", _cd},
