@@ -99,7 +99,7 @@ int replace_alias(parse_t *info)
 }
 
 /**
- * replace_vars - replaces vars in the tokenized string
+ * replace_variables - replaces vars in the tokenized string
  * @info: the parameter struct
  *
  * Return: 1 if replaced, 0 otherwise
