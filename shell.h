@@ -1,66 +1,230 @@
 #ifndef SHELL_H
 #define SHELL_H
 
-#include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/wait.h>
-#include <wait.h>
+#include <sys/stat.h>
+#include <limits.h>
 #include <fcntl.h>
-#include <dirent.h>
-#include <signal.h>
+#include <errno.h>
+
+/* for read/write buffers */
+#define READ_BUF_SIZE 1024
+#define WRITE_BUF_SIZE 1024
+#define BUF_FLUSH -1
+
+/* for command chaining */
+#define CMD_NORM	0
+#define CMD_OR		1
+#define CMD_AND		2
+#define CMD_CHAIN	3
+
+/* for convert_number() */
+#define CONVERT_LOWERCASE	1
+#define CONVERT_UNSIGNED	2
+
+/* if using system getline() */
+#define _GETLINE 0
+#define _STRTOK 0
+
+#define INFO_FILE	".simple_shell_history"
+#define INFO_MAX	4096
+
+extern char **environ;
+
 
 /**
- *  struct list - linked list for environmental variables
- *  @var: holds environmental variable string
- *  @next: points to next node
+ * struct list - linked list
+ * @num: the number field
+ * @str: a string
+ * @next: points to the next node
  */
 typedef struct list
 {
-	char *var;
+	int num;
+	char *str;
 	struct list *next;
-
 } list_t;
 
-/* function prototypes */
-int prompt(char **);
-void *_realloc(void *, unsigned int, unsigned int);
-size_t get_line(char **);
-int toks_strlen(char *, int, char);
-char *ignore_space(char *);
+/**
+ *struct parseredir - contains pseudo-arguements to pass into a function,
+ *		allowing uniform prototype for function pointer struct
+ *@arg: a string generated from getline containing arguements
+ *@argv: an array of strings generated from arg
+ *@path: a string path for the current command
+ *@argc: the argument count
+ *@line_count: the error count
+ *@error_num: the error code for exit()s
+ *@_flag_count: if on count this line of input
+ *@file_name: the program filename
+ *@env: linked list local copy of environ
+ *@environ: custom modified copy of environ from LL env
+ *@pathnode: the history node
+ *@alias: the alias node
+ *@env_changed: on if environ was changed
+ *@stat: the return status of the last exec'd command
+ *@cmd_buf: address of pointer to cmd_buf, on if chaining
+ *@cmd_buf_type: CMD_type ||, &&, ;
+ *@read_fd: the fd from which to read line input
+ *@count: the history line number count
+ */
+typedef struct parseredir
+{
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	unsigned int line_count;
+	int error_num;
+	int _flag_count;
+	char *file_name;
+	list_t *env;
+	list_t *previous;
+	list_t *alias;
+	char **environ;
+	int env_changed;
+	int stat;
 
-/* built in functions */
-int _built_in(char **, list_t *, int, char **);
-char **_strtok(char *, char *);
-char **c_strtok(char *, char *);
-char *_strcat(char *, char *);
-char *_strdup(char *);
-char *_strcpy(char *, char *);
+	char **cmd_buf; /* pointer to cmd ; chain buffer, for memory mangement */
+	int cmd_buf_type; /* CMD_type ||, &&, ; */
+	int read_fd;
+	int count;
+} parse_t;
+
+#define SPACE_INIT \
+{NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
+	0, 0, 0}
+
+/**
+ *struct built_in - contains a builtin string and related function
+ *@type: the builtin command flag
+ *@func: the function
+ */
+typedef struct built_in
+{
+	char *type;
+	int (*func)(parse_t *);
+} built_in_t;
+
+int hsh(parse_t *, char **);
+int find_builtin(parse_t *);
+void find_cmd(parse_t *);
+void fork_cmd(parse_t *);
+
+/* parser.c */
+int _cmd(parse_t *, char *);
+char *dup_char(char *, int, int);
+char *find_path(parse_t *, char *, char *);
+
+/* traverse.c */
+int trav(char **);
+
+/* perrors.c */
+void er_puts(char *);
+int er_putchar(char);
+int _putfd(char c, int fd);
+int _putsfd(char *str, int fd);
+
+/* string len, cmp cat and start.c */
+int _strlen(char *);
 int _strcmp(char *, char *);
+char *strst_with(const char *, const char *);
+char *_strcat(char *, char *);
 
+/* string copy, dup.c */
+char *_strcpy(char *, char *);
+char *_strdup(const char *);
+void _puts(char *);
+int _putchar(char);
 
-int _cd(char **, list_t *, int);
-void non_interactive(list_t *);
-char *_which(char *, list_t *);
-int _exit_(char **, list_t *, int, char **);
-int _execve(char **, list_t *, int);
-void free_ptr_ptr(char **);
-void free_linked_list(list_t *);
-int p_env(char **, list_t *);
-char *get_env(char *, list_t *);
-list_t *env_linked_list(char **);
-list_t *add_node_t_end(list_t **, char *);
-ssize_t print_list(list_t *);
-int delete_nodeint_at_index(list_t **, unsigned int);
-int _unset_env(list_t **, char **);
-int _set_env(list_t **, char **);
-int find_env(list_t *, char *);
-void _notfound(char *, int, list_t *);
-void can_not_cd_to(char *, int, list_t *);
-void forbid_num(char *, int, list_t *);
-char *int_to_string(int);
+/*_exits.c */
+char *_strncpy(char *, char *, int);
+char *_strncat(char *, char *, int);
+char *_strchr(char *, char);
+
+/* tokenization */
+char **strtow(char *, char *);
+char **strtow2(char *, char);
+
+/* reallocation of memory */
+char *_memset(char *, char, unsigned int);
+void ffree(char **);
+void *_realloc(void *, unsigned int, unsigned int);
+
+/* memory freeing */
+int c_free(void **);
+
+/* atoi */
+int inter_active(parse_t *);
+int delim(char, char *);
+int is_alphabet(int);
+int str_to_int(char *);
+
+/* errors handling and write output */
+int _err_atoi(char *);
+void print_error(parse_t *, char *);
+int print_d(int, int);
+char *convert_number(long int, int, int);
+void remove_comments(char *);
+
+/* built_in functions */
+int __exit(parse_t *);
+int _cd(parse_t *);
+int c_cd(parse_t *);
+int _info(parse_t *);
+int c_alias(parse_t *);
+
+/* getline functions */
+ssize_t get_input(parse_t *);
+int _getline(parse_t *, char **, size_t *);
+void sigintHandler(int);
+
+/* getenv function*/
+void clear_en(parse_t *);
+void set_en(parse_t *, char **);
+void free_en(parse_t *, int);
+
+/* environ function */
+char *_getenv(parse_t *, const char *);
+int _env(parse_t *);
+int _set_env(parse_t *);
+int _unset_env(parse_t *);
+int p_env_list(parse_t *);
+
+/* getenv functions */
+char **get_environ(parse_t *);
+int _unsetenv(parse_t *, char *);
+int _setenv(parse_t *, char *, char *);
+
+/* syste info */
+char *get_file(parse_t *info);
+int write_(parse_t *info);
+int read_(parse_t *info);
+int build_list(parse_t *info, char *buf, int linecount);
+int renum(parse_t *info);
+
+/* linked lists */
+list_t *add_node(list_t **, const char *, int);
+list_t *add_node_end(list_t **, const char *, int);
+size_t print_list_str(const list_t *);
+int delete_node_at_index(list_t **, unsigned int);
+void free_list(list_t **);
+
+size_t list_len(const list_t *);
+char **list_to_strings(list_t *);
+size_t print_list(const list_t *);
+list_t *node_starts_with(list_t *, char *, char);
+ssize_t get_node_index(list_t *, list_t *);
+
+/* variables */
+int is_link(parse_t *, char *, size_t *);
+void check_link(parse_t *, char *, size_t *, size_t, size_t);
+int replace_alias(parse_t *);
+int replace_vars(parse_t *);
+int replace_string(char **, char *);
 
 #endif
